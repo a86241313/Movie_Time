@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>電影時刻表</title>
+    <link rel="stylesheet" type="text/css" href="css/css.css" />
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <!-- <script src="movie_time.js"></script> -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container-fuild h-100">
+        <div class="row  h-100">
+            <div class="col-md-3"></div>
+            <div class="col-md-6" id="form">
+                <div id="upper"><button id="up1">快速訂票</button><button id="up2">快搜空位</button></div>
+                <hr>
+                <div id="mid">
+                    <img src="./img/location.png" alt="" id="loc">
+                    <select id="locate" class="form-control" onchange="changeLocate()">
+                        <option value="" id="locate2" disabled selected>請選擇影城</option>
+                    </select>
+                    <br>
+                    <img src="./img/Movie.png" alt="" id="mov">
+                    <select id="movie" class="form-control">
+                        <option value="" disabled selected>請選擇影片</option>　
+                    </select>
+                    <br>
+                    <img src="./img/calender.png" alt="" id="dat">
+                    <select id="date" class="form-control">
+                        <option disabled value="" disabled selected>請選擇日期</option>
+                    </select>
+                </div>
+                <br>
+                <div id="footer"><button id="sub">查看座位</button></div>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+
+    </div>
+    <script>
+        var list = '{ "Movie" : [' +
+            '{ "theater":"台北信義威秀影城" , "Film":["玩命關頭：特別行動","蜘蛛人：離家日","復仇者聯盟：終局之戰和漫威特輯"] },' +
+            '{ "theater":"新竹大遠百威秀影城" , "Film":["名偵探柯南：紺青之拳","聖☆哥傳：第II紀","舞台『刀劍亂舞』慈傳 現場直播","電影哆啦A夢：大雄的月球探測記" ]},' +
+            '{ "theater":"台中大遠百威秀影城" , "Film":["豢養殺人鬼的女人","鬼學怨","伊剎貝爾","仲夏魘","鱷魔","安娜貝爾回家囉","深海獵奇3D"]},' +
+            '{ "theater":"台中TIGER CITY威秀影城" , "Film":["駭客任務","從前，有個好萊塢","電流大戰","人生消極掰","真犯"] },' +
+            '{ "theater":"台南大遠百威秀影城" , "Film":["馬克白","李爾王","五月天 人生無限公司","哈柏太空之旅3D"]},' +
+            '{ "theater":"高雄大遠百威秀影城" , "Film":["獅子王","阿拉丁","玩具總動員4"]} ]}';
+        var obj = JSON.parse(list);
+
+        // console.log(obj);
+        // console.log(obj.Movie);
+        // console.log(obj.Movie[0]);
+        // console.log(obj.Movie.length);
+        // console.log(obj.Movie[0].Film.length);
+        // console.log(obj.Movie[0].Film[0]);
+
+        for (var i = 0; i < obj.Movie.length; i++) {
+            $("#locate").append(`<option value=${i}>  ${obj.Movie[i].theater}  </option>`);
+        }
+
+        function changeLocate(value) {
+            $("#movie").empty();
+            $("#movie").append(`<option value="" aria-readonly="true">請選擇影片</option>`);
+            var temp = $("#locate").prop("value");
+            console.log(temp);
+            // console.log(obj.Movie[0].Film.length);
+            for (var i = 0; i < obj.Movie[temp].Film.length; i++) {
+                console.log(obj.Movie[temp].Film[i]);
+                $("#movie").append(`<option value=${i}> ${obj.Movie[temp].Film[i]} </option>`);
+            }
+        }
+        // 日期=====================================================
+        // =====================================================
+        var d = new Date();
+        var date = new Date();
+        var year = d.getFullYear();
+        var month = d.getMonth() + 1;
+        var date = d.getDate();
+        var day = d.getDay();
+        d.setMonth(d.getMonth() + 1);
+        d.setDate(1);
+        d.setDate(d.getDate() - 1);
+        var lastDate = d.getDate();
+
+        console.log(d);
+        console.log(year);
+        console.log(month);
+        console.log(date);
+        console.log(day);
+
+        console.log(lastDate);
+
+        if (day >= 3) {
+            for (var i = 0; i < 10 - day; i++) {
+                if (date + i > lastDate) {
+                    $("#date").append(`<option value=${i}>  ${year}/${month+1}/${date + i - lastDate}  </option>`);
+                } else {
+                    $("#date").append(`<option value=${i}>  ${year}/${month}/${date+i}  </option>`);
+                }
+            }
+
+
+        } else {
+            for (var i = 0; i < 3 - day; i++) {
+                if (date + i > lastDate) {
+                    $("#date").append(`<option value=${i}>  ${year}/${month+1}/${date + i - lastDate}  </option>`);
+                } else {
+                    $("#date").append(`<option value=${i}>  ${year}/${month}/${date+i}  </option>`);
+                }
+            }
+        }
+    </script>
+    <!--全省威秀影城隔週電影新場次公布於每週二晚間23: 59-->
+    <!--(假設週二整天只能查到： 週二 週三 週四) -->
+    <!--會開放未來一週(週三會查到： 今天到下星期四) 之場次-->
+</body>
+
+</html>
